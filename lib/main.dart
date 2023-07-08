@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import './recipeaddpage.dart';
-import './pages.dart';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_application_1/screens/login_screen.dart';
+import 'package:flutter_application_1/screens/recipe_add_screen.dart';
+import 'package:flutter_application_1/screens/recipe_detail_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_application_1/screens/recipe_list_screen.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -17,78 +17,36 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  //
+  @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'RecipeApp',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+        primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _currentIndex = 0;
-  final List<Widget> _pageWidgets = <Widget>[
-    widget1(),
-    widget2(),
-  ];
-  void _onItemTapped(int index) {
-    setState(() {
-      _currentIndex = index;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text('レシピアプリ'),
-      ),
-      body: _pageWidgets[_currentIndex],
-      floatingActionButton: _currentIndex == 0
-          ? FloatingActionButton(
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) {
-                    return RecipeAddPage();
-                  }),
-                );
-              },
-              child: Icon(Icons.add),
-            )
-          : null,
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: '検索',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: '設定',
-          )
-        ],
-        currentIndex: _currentIndex,
-        onTap: _onItemTapped,
-        selectedItemColor: Colors.red,
-        unselectedItemColor: Colors.grey[600],
-        backgroundColor: const Color.fromARGB(255, 245, 241, 241),
-      ),
+      onGenerateRoute: (Settings) {
+        if (Settings.name == '/detail') {
+          final arguments = Settings.arguments as Map<String, String>;
+          return MaterialPageRoute(
+            builder: (context) => RecipeDetailScreen(
+                userId: arguments['userid']!, recipeId: arguments['recipeid']!),
+          );
+        } else if (Settings.name == '/') {
+          return MaterialPageRoute(
+            builder: (context) => const LoginScreen(),
+          );
+        } else if (Settings.name == '/list') {
+          return MaterialPageRoute(
+            builder: (context) => const RecipeListScreen(),
+          );
+        } else if (Settings.name == '/add') {
+          final arguments = Settings.arguments as Map<String, String>;
+          return MaterialPageRoute(
+            builder: (context) =>
+                RecipeAddScreen(userId: arguments['userid']!, recipe: null),
+          );
+        }
+      },
     );
   }
 }
