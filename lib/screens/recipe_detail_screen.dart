@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/helper/firebase_helper.dart';
 import 'package:flutter_application_1/models/recipe.dart';
@@ -63,7 +62,7 @@ class RecipeDetailScreen extends StatelessWidget {
           if (snapshot.hasData) {
             Recipe recipe = snapshot.data;
             // レシピのタイトル、サムネイル画像、材料、作り方、メモを
-            // recipe_add_screen.dartと同じように表示する
+            // recipe_add_screen.dartと同じようなUIで表示する
             return SingleChildScrollView(
               child: Column(
                 children: [
@@ -95,7 +94,12 @@ class RecipeDetailScreen extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        Text(recipe.ingredients),
+                        Text(
+                          recipe.ingredients,
+                          style: const TextStyle(
+                            fontSize: 16,
+                          ),
+                        ),
                         const SizedBox(height: 10),
                         Text(
                           '作り方',
@@ -104,7 +108,12 @@ class RecipeDetailScreen extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        Text(recipe.instructions),
+                        Text(
+                          recipe.instructions,
+                          style: const TextStyle(
+                            fontSize: 16,
+                          ),
+                        ),
                         const SizedBox(height: 10),
                         Text(
                           'メモ',
@@ -113,7 +122,12 @@ class RecipeDetailScreen extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        Text(recipe.memo!),
+                        Text(
+                          recipe.memo!,
+                          style: const TextStyle(
+                            fontSize: 16,
+                          ),
+                        ),
                       ],
                     ),
                   ),

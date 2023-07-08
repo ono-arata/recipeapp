@@ -17,12 +17,6 @@ class _RecipeListScreenState extends State<RecipeListScreen> {
   List<Recipe> RecipeList = [];
   bool _isloading = false;
   String userId = '';
-  int _currentIndex = 0;
-  void _onItemTapped(int index) {
-    setState(() {
-      _currentIndex = index;
-    });
-  }
 
   @override
   void initState() {
@@ -73,7 +67,7 @@ class _RecipeListScreenState extends State<RecipeListScreen> {
                           height: 120,
                           child: FittedBox(
                               fit: BoxFit.fill,
-                              child: Image.asset('images/tkg.jpg')),
+                              child: Image.network(recipe.thumbnailUrl)),
                         ),
                         Column(
                           children: [

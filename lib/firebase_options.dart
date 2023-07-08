@@ -67,8 +67,10 @@ class DefaultFirebaseOptions {
     messagingSenderId: '751628143025',
     projectId: 'recipeapp-54e86',
     storageBucket: 'recipeapp-54e86.appspot.com',
-    androidClientId: '751628143025-9n4oustfok35q3av2uhtga7ao7ne21j0.apps.googleusercontent.com',
-    iosClientId: '751628143025-kn6jnvcqpmv5rsi6tbb05fvme8jem3cc.apps.googleusercontent.com',
+    androidClientId:
+        '751628143025-9n4oustfok35q3av2uhtga7ao7ne21j0.apps.googleusercontent.com',
+    iosClientId:
+        '751628143025-kn6jnvcqpmv5rsi6tbb05fvme8jem3cc.apps.googleusercontent.com',
     iosBundleId: 'com.example.flutterApplication1',
   );
 
@@ -78,8 +80,10 @@ class DefaultFirebaseOptions {
     messagingSenderId: '751628143025',
     projectId: 'recipeapp-54e86',
     storageBucket: 'recipeapp-54e86.appspot.com',
-    androidClientId: '751628143025-9n4oustfok35q3av2uhtga7ao7ne21j0.apps.googleusercontent.com',
-    iosClientId: '751628143025-q2vten03se7isno3bc7kgrrs6ms20oeg.apps.googleusercontent.com',
+    androidClientId:
+        '751628143025-9n4oustfok35q3av2uhtga7ao7ne21j0.apps.googleusercontent.com',
+    iosClientId:
+        '751628143025-q2vten03se7isno3bc7kgrrs6ms20oeg.apps.googleusercontent.com',
     iosBundleId: 'com.example.flutterApplication1.RunnerTests',
   );
 }
