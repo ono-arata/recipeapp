@@ -20,19 +20,32 @@ class FirestoreHelper {
   Future<String> saveImageToFirebaseStorage(
       File imageFile, String recipeid) async {
     final userId = GetUserId();
-    final ref = FirebaseStorage.instance
+    await FirebaseStorage.instance
         .ref()
         .child('users/$userId/recipe/$recipeid')
-        .child('thumbnailof$recipeid.jpg');
-    await ref.putFile(imageFile);
-    final imageUrl = await ref.getDownloadURL();
-    return imageUrl;
+        .child('thumbnailof${recipeid}.jpg')
+        .putFile(imageFile);
+    final downloadUrl = await FirebaseStorage.instance
+        .ref()
+        .child('users/$userId/recipe/$recipeid')
+        .child('thumbnailof${recipeid}.jpg')
+        .getDownloadURL();
+    return downloadUrl;
   }
 
-  AddRecipe(Recipe recipe, String userId) {
+  AddRecipe(Recipe recipe, String userId, File? imageFile) async {
     if (recipe.recipeid.isEmpty) {
       final newDoc = db.doc(userId).collection("recipe").doc().id;
       recipe.recipeid = newDoc;
+    }
+    if (imageFile != null) {
+      await FirestoreHelper()
+          .saveImageToFirebaseStorage(imageFile, recipe.recipeid);
+      recipe.thumbnailUrl = await FirebaseStorage.instance
+          .ref()
+          .child('users/$userId/recipe/${recipe.recipeid}')
+          .child('thumbnailof${recipe.recipeid}.jpg')
+          .getDownloadURL();
     }
     final RecipeRef =
         db.doc(userId).collection("recipe").doc(recipe.recipeid).withConverter(
@@ -58,6 +71,12 @@ class FirestoreHelper {
   }
 
   DeleteRecipe(String userId, String recipeid) async {
+    //delete image and folder from firebase storage
+    final ref = FirebaseStorage.instance
+        .ref()
+        .child('users/$userId/recipe/$recipeid')
+        .child('thumbnailof${recipeid}.jpg');
+    await ref.delete();
     return db.doc(userId).collection("recipe").doc(recipeid).delete();
   }
 }

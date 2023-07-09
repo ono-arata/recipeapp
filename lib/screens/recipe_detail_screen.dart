@@ -66,14 +66,15 @@ class RecipeDetailScreen extends StatelessWidget {
             return SingleChildScrollView(
               child: Column(
                 children: [
-                  Container(
-                    height: 300,
-                    width: double.infinity,
-                    child: Image.network(
-                      recipe.thumbnailUrl,
-                      fit: BoxFit.cover,
+                  if (recipe.thumbnailUrl != '')
+                    Container(
+                      height: 300,
+                      width: double.infinity,
+                      child: Image.network(
+                        recipe.thumbnailUrl,
+                        fit: BoxFit.cover,
+                      ),
                     ),
-                  ),
                   Container(
                     padding: const EdgeInsets.all(10),
                     child: Column(

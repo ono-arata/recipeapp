@@ -61,14 +61,15 @@ class _RecipeListScreenState extends State<RecipeListScreen> {
                           side: BorderSide(width: 0.5),
                           borderRadius: BorderRadius.circular(3.0)),
                       child: Row(children: [
-                        Container(
-                          margin: const EdgeInsets.all(5),
-                          width: 160,
-                          height: 120,
-                          child: FittedBox(
-                              fit: BoxFit.fill,
-                              child: Image.network(recipe.thumbnailUrl)),
-                        ),
+                        if (recipe.thumbnailUrl != '')
+                          Container(
+                            margin: const EdgeInsets.all(5),
+                            width: 160,
+                            height: 120,
+                            child: FittedBox(
+                                fit: BoxFit.fill,
+                                child: Image.network(recipe.thumbnailUrl)),
+                          ),
                         Column(
                           children: [
                             Text(

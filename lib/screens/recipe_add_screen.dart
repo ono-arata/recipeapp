@@ -23,7 +23,7 @@ class _RecipeAddScreenState extends State<RecipeAddScreen> {
   late String instructions;
   late String? memo;
   late Timestamp createdat;
-
+  late File? image;
   void initState() {
     super.initState();
     recipeid = widget.recipe?.recipeid ?? '';
@@ -33,6 +33,7 @@ class _RecipeAddScreenState extends State<RecipeAddScreen> {
     instructions = widget.recipe?.instructions ?? '';
     createdat = widget.recipe?.createdat ?? Timestamp.now();
     memo = widget.recipe?.memo ?? '';
+    image = null;
   }
 
   Widget build(BuildContext context) {
@@ -58,10 +59,10 @@ class _RecipeAddScreenState extends State<RecipeAddScreen> {
                 title != null && title.isEmpty ? '料理名を入力してください' : null,
             onChanged: (title) => setState(() => this.title = title),
           ),
+          //料理の写真が選択されていない場合は、二つのアイコンを表示
           SizedBox(height: 16),
           Text('料理の写真を選択してください',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-          //写真を追加するためのギャラリーアイコンとカメラアイコンを表示
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -79,6 +80,15 @@ class _RecipeAddScreenState extends State<RecipeAddScreen> {
               ),
             ],
           ),
+          //料理の写真が選択されている場合は、選択された写真のみを表示
+          if (image != null)
+            Container(
+              margin: const EdgeInsets.all(5),
+              width: 300,
+              height: 200,
+              child: FittedBox(
+                  fit: BoxFit.fill, child: Image.file(File(image!.path))),
+            ),
           SizedBox(height: 16),
           Text(
             '材料',
@@ -128,7 +138,8 @@ class _RecipeAddScreenState extends State<RecipeAddScreen> {
   }
 
   Widget RecipeSaveButton() {
-    final isFormValid = instructions.isNotEmpty;
+    // タイトルと作り方が入力されている場合は、保存ボタンの色を変え、有効にする
+    final isFormValid = title.isNotEmpty && instructions.isNotEmpty;
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: ElevatedButton(
@@ -138,7 +149,7 @@ class _RecipeAddScreenState extends State<RecipeAddScreen> {
           foregroundColor:
               isFormValid ? Colors.redAccent : Colors.grey.shade700,
         ),
-        onPressed: createOrUpdateRecipe,
+        onPressed: isFormValid ? createOrUpdateRecipe : null,
       ),
     );
   }
@@ -167,7 +178,7 @@ class _RecipeAddScreenState extends State<RecipeAddScreen> {
       memo: memo,
     );
     final firestoreHelper = FirestoreHelper();
-    await firestoreHelper.AddRecipe(recipe, widget.userId);
+    await firestoreHelper.AddRecipe(recipe, widget.userId, image);
   }
 
   // 追加処理の呼び出し
@@ -182,7 +193,7 @@ class _RecipeAddScreenState extends State<RecipeAddScreen> {
       createdat: createdat,
       memo: memo,
     );
-    await firestoreHelper.AddRecipe(recipe, widget.userId);
+    await firestoreHelper.AddRecipe(recipe, widget.userId, image);
   }
 
   // 画像を選択し、画像のパスの取得とFirebase Storageへのアップロードを行う
@@ -191,10 +202,8 @@ class _RecipeAddScreenState extends State<RecipeAddScreen> {
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
     if (pickedFile == null) return;
     final imageFile = File(pickedFile.path);
-    final imageUrl =
-        await FirestoreHelper().saveImageToFirebaseStorage(imageFile, recipeid);
     setState(() {
-      thumbnailUrl = imageUrl;
+      image = imageFile;
     });
   }
 
@@ -203,10 +212,8 @@ class _RecipeAddScreenState extends State<RecipeAddScreen> {
     final pickedFile = await picker.pickImage(source: ImageSource.camera);
     if (pickedFile == null) return;
     final imageFile = File(pickedFile.path);
-    final imageUrl =
-        await FirestoreHelper().saveImageToFirebaseStorage(imageFile, recipeid);
     setState(() {
-      thumbnailUrl = imageUrl;
+      image = imageFile;
     });
   }
 }
