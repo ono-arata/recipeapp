@@ -76,10 +76,12 @@ class _RecipeListScreenState extends State<RecipeListScreen> {
                               recipe.title,
                               style: TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 32),
+                              overflow: TextOverflow.ellipsis,
                             ),
                             Text(
                               recipe.ingredients,
                               style: TextStyle(fontSize: 24),
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ],
                         ),
